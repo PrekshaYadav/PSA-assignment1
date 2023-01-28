@@ -1,5 +1,5 @@
 import collections
-
+import random
 #The women that the men prefer
 preferred_rankings_men = {
 	'ryan': 	['lizzy', 'sarah', 'zoey', 'daniella'],
@@ -78,11 +78,51 @@ def stable_matching():
             begin_matching(man)
 
 
+
+def stable( tentative_engagements):
+
+    for match in tentative_engagements:
+
+        if (preferred_rankings_women[match[1]][0] != match[0]):
+            return 0
+
+        if (preferred_rankings_men[match[0]][0] != match[1]):
+            return 0
+
+        return 1
+
+
+
+
+
+
+
 def main():
     init_free_men()
     print(free_men)
     stable_matching()
     print(tentative_engagements)
+    print(type(preferred_rankings_men))
 
+    # Question 10.B: Shuffle 1000 times.
+    sum = 0
+    for i in range(0,1000):
+        for key in preferred_rankings_men:
+            random.shuffle(preferred_rankings_men[key])
+
+        for key in preferred_rankings_women:
+            random.shuffle(preferred_rankings_women[key])
+
+        stable_matching()
+
+        a = stable(tentative_engagements)
+        sum = sum +a
+
+    sum = (sum/1000)*100
+    print("Percentage of stable playoff matches after 1000 random shuffling is ",sum, "%")
+    print(preferred_rankings_men)
+    print(preferred_rankings_women)
+
+    stable(tentative_engagements)
 
 main()
